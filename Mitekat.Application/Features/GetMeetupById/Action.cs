@@ -1,6 +1,5 @@
 ﻿namespace Mitekat.Application.Features.GetMeetupById;
 
-using System;
 using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,11 +18,11 @@ public class GetMeetupByIdAction : ControllerBase
     public GetMeetupByIdAction(IMediator mediator) =>
         this.mediator = mediator;
 
-    [HttpGet("{meetupId:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> Action([FromRoute] Guid meetupId, CancellationToken cancellationToken)
+    [HttpGet("{MeetupId:guid}")]
+    [ProducesResponseType(typeof(MeetupViewModel), StatusCodes.Status200OK)]
+    public async Task<IActionResult> Action(GetMeetupByIdRequest request, CancellationToken cancellationToken)
     {
-        var meetup = await mediator.Send(new GetMeetupByIdRequest(meetupId), cancellationToken);
+        var meetup = await mediator.Send(request, cancellationToken);
         return Ok(meetup);
     }
 }

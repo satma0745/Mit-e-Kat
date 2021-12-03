@@ -19,11 +19,11 @@ internal class RegisterNewMeetupRequestHandler : IRequestHandler<RegisterNewMeet
         var meetup = new Meetup
         {
             Id = Guid.NewGuid(),
-            Title = request.Title,
-            Description = request.Description,
-            Speaker = request.Speaker,
-            Duration = TimeSpan.FromMinutes(request.Duration),
-            StartTime = request.StartTime
+            Title = request.Properties.Title,
+            Description = request.Properties.Description,
+            Speaker = request.Properties.Speaker,
+            Duration = TimeSpan.FromMinutes(request.Properties.Duration),
+            StartTime = request.Properties.StartTime
         };
         context.Meetups.Add(meetup);
         

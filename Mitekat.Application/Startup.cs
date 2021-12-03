@@ -6,6 +6,7 @@ using MediatR;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mitekat.Application.Extensions;
@@ -15,10 +16,17 @@ internal class Startup
 {
     public static void ConfigureServices(IServiceCollection services) =>
         services
-            .AddSwaggerGen()
+            .AddSwaggerGen(options =>
+            {
+                options.CustomSchemaIds(type => type.FullName);
+            })
             .AddFluentValidationRulesToSwagger()
             .AddMitekatContext()
             .AddMediatR(Assembly.GetExecutingAssembly())
+            .Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressInferBindingSourcesForParameters = true;
+            })
             .AddControllers()
             .AddFluentValidation(options =>
             {
@@ -31,7 +39,10 @@ internal class Startup
             .If(environment.IsDevelopment, () =>
             {
                 application.UseSwagger();
-                application.UseSwaggerUI();
+                application.UseSwaggerUI(options =>
+                {
+                    options.DefaultModelsExpandDepth(-1);
+                });
             })
             .UseRouting()
             .UseAuthentication()

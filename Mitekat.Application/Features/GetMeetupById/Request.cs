@@ -2,11 +2,10 @@
 
 using System;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
-internal class GetMeetupByIdRequest : IRequest<MeetupViewModel>
+public class GetMeetupByIdRequest : IRequest<MeetupViewModel>
 {
-    public Guid MeetupId { get; }
-
-    public GetMeetupByIdRequest(Guid meetupId) =>
-        MeetupId = meetupId;
+    [FromRoute]
+    public Guid MeetupId { get; set; }
 }

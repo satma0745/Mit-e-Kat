@@ -1,18 +1,22 @@
-﻿namespace Mitekat.Application.Features.RegisterNewMeetup;
+﻿namespace Mitekat.Application.Features.UpdateMeetup;
 
 using FluentValidation;
 
-internal class RegisterNewMeetupRequestValidator : AbstractValidator<RegisterNewMeetupRequest>
+internal class UpdateMeetupRequestValidator : AbstractValidator<UpdateMeetupRequest>
 {
-    public RegisterNewMeetupRequestValidator() =>
+    public UpdateMeetupRequestValidator()
+    {
+        RuleFor(request => request.MeetupId).NotEmpty();
+
         RuleFor(request => request.Properties)
             .NotNull()
-            .SetValidator(new MeetupPropertiesValidator());
+            .SetValidator(new EditableMeetupPropertiesValidator());
+    }
 }
 
-internal class MeetupPropertiesValidator : AbstractValidator<MeetupProperties>
+internal class EditableMeetupPropertiesValidator : AbstractValidator<EditableMeetupProperties>
 {
-    public MeetupPropertiesValidator()
+    public EditableMeetupPropertiesValidator()
     {
         RuleFor(request => request.Title)
             .NotEmpty()
