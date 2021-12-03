@@ -3,6 +3,6 @@
 using System.Collections.Generic;
 using MediatR;
 
-public class GetAllMeetupsRequest : IRequest<ICollection<MeetupViewModel>>
+internal class GetAllMeetupsRequest : IRequest<ICollection<MeetupViewModel>>
 {
 }

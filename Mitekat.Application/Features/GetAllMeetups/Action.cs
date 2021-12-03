@@ -1,5 +1,6 @@
 ﻿namespace Mitekat.Application.Features.GetAllMeetups;
 
+using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ public class GetAllMeetupsAction : ControllerBase
         this.mediator = mediator;
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ICollection<MeetupViewModel>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Action(CancellationToken cancellationToken)
     {
         var meetups = await mediator.Send(new GetAllMeetupsRequest(), cancellationToken);

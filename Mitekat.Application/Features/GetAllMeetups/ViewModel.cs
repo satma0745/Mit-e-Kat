@@ -3,7 +3,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-public class MeetupViewModel
+internal class MeetupViewModel
 {
     [JsonPropertyName("id")]
     public Guid Id { get; init; }
