@@ -10,10 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mitekat.Application.Extensions;
+using Mitekat.Application.FeatureProviders;
 using Mitekat.Model.Extensions.DependencyInjection;
 
 internal class Startup
 {
+    // TODO: Move to corresponding Dependency Injection Extension methods.
     public static void ConfigureServices(IServiceCollection services) =>
         services
             .AddSwaggerGen(options =>
@@ -22,12 +24,17 @@ internal class Startup
             })
             .AddFluentValidationRulesToSwagger()
             .AddMitekatContext()
+            .AddAutoMapper(Assembly.GetExecutingAssembly())
             .AddMediatR(Assembly.GetExecutingAssembly())
             .Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressInferBindingSourcesForParameters = true;
             })
             .AddControllers()
+            .ConfigureApplicationPartManager(applicationPart =>
+            {
+                applicationPart.FeatureProviders.Add(new ActionFeatureProvider());
+            })
             .AddFluentValidation(options =>
             {
                 options.DisableDataAnnotationsValidation = true;
