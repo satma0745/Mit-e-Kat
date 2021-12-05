@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
+using Mitekat.Application.Helpers;
 using Mitekat.Model.Extensions.DependencyInjection;
 
 internal class Startup
@@ -25,6 +26,7 @@ internal class Startup
             })
             .AddFluentValidationRulesToSwagger()
             .AddMitekatContext()
+            .AddScoped<AuthTokenHelper>()
             .AddAutoMapper(Assembly.GetExecutingAssembly())
             .AddMediatR(Assembly.GetExecutingAssembly())
             .Configure<ApiBehaviorOptions>(options =>

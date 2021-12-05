@@ -1,4 +1,4 @@
-﻿namespace Mitekat.Application.Features;
+﻿namespace Mitekat.Application.Features.Meetups;
 
 using System;
 using System.Collections.Generic;

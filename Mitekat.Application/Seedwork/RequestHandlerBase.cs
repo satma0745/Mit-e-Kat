@@ -29,4 +29,7 @@ internal abstract class RequestHandlerBase<TRequest, TResource> : IRequestHandle
 
     protected static Response<TResource> NotFoundFailure() =>
         Response<TResource>.Failure(new Error.NotFoundError());
+
+    protected static Response<TResource> ConflictFailure() =>
+        Response<TResource>.Failure(new Error.ConflictError());
 }

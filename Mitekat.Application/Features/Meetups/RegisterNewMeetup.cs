@@ -1,4 +1,4 @@
-﻿namespace Mitekat.Application.Features;
+﻿namespace Mitekat.Application.Features.Meetups;
 
 using System;
 using System.Threading;
@@ -8,15 +8,14 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
 using Mitekat.Application.Seedwork;
 using Mitekat.Model.Context;
 using Mitekat.Model.Entities;
 
-[Feature("Meetups", "Update meetup")]
-public static class UpdateMeetupFeature
+[Feature("Meetups", "Register a new meetup")]
+public static class RegisterNewMeetupFeature
 {
     public class Action : ActionBase
     {
@@ -25,28 +24,19 @@ public static class UpdateMeetupFeature
         {
         }
 
-        [HttpPut("/api/meetups/{MeetupId:guid}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [HttpPost("/api/meetups")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public Task<IActionResult> Perform(Request request, CancellationToken cancellationToken) =>
             Mediator
                 .Send(request, cancellationToken)
-                .ToActionResult(
-                    onSuccess: NoContent,
-                    error => error switch
-                    {
-                        Error.NotFoundError => NotFound(),
-                        _ => InternalServerError()
-                    });
+                .ToActionResult(Created, InternalServerError);
     }
     
     public class Request : RequestBase<Unit>
     {
-        [FromRoute]
-        public Guid MeetupId { get; set; }
-    
         [FromBody]
         public MeetupProperties Properties { get; set; }
-
+        
         public record MeetupProperties(
             string Title,
             string Description,
@@ -64,30 +54,21 @@ public static class UpdateMeetupFeature
 
         public override async Task<Response<Unit>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var meetup = await Context.Meetups
-                .SingleOrDefaultAsync(meetup => meetup.Id == request.MeetupId, cancellationToken);
-            if (meetup is null)
-            {
-                return NotFoundFailure();
-            }
+            var meetup = Mapper.Map<Meetup>(request.Properties);
         
-            Mapper.Map(request.Properties, meetup);
+            Context.Meetups.Add(meetup);
             await Context.SaveChangesAsync(cancellationToken);
-
+        
             return Success();
         }
     }
     
     internal class RequestValidator : AbstractValidator<Request>
     {
-        public RequestValidator()
-        {
-            RuleFor(request => request.MeetupId).NotEmpty();
-
+        public RequestValidator() =>
             RuleFor(request => request.Properties)
                 .NotNull()
                 .SetValidator(new PropertiesValidator());
-        }
         
         private class PropertiesValidator : AbstractValidator<Request.MeetupProperties>
         {
@@ -116,7 +97,7 @@ public static class UpdateMeetupFeature
             }
         }
     }
-    
+
     internal class MappingProfile : Profile
     {
         public MappingProfile() =>
