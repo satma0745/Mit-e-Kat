@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
-using Mitekat.Application.FeatureProviders;
 using Mitekat.Model.Extensions.DependencyInjection;
 
 internal class Startup
@@ -21,6 +21,7 @@ internal class Startup
             .AddSwaggerGen(options =>
             {
                 options.CustomSchemaIds(type => type.FullName);
+                options.OperationFilter<SwaggerFeatureConvention>();
             })
             .AddFluentValidationRulesToSwagger()
             .AddMitekatContext()
@@ -33,7 +34,7 @@ internal class Startup
             .AddControllers()
             .ConfigureApplicationPartManager(applicationPart =>
             {
-                applicationPart.FeatureProviders.Add(new ActionFeatureProvider());
+                applicationPart.UseFeatureProvider<MvcFeatureConvention>();
             })
             .AddFluentValidation(options =>
             {

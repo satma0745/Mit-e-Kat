@@ -8,14 +8,15 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
 using Mitekat.Application.Seedwork;
 using Mitekat.Model.Context;
 using Mitekat.Model.Entities;
 
+[Feature("Meetups", "Register a new meetup")]
 public static class RegisterNewMeetupFeature
 {
-    [Route("/api/meetups")]
     public class Action : ActionBase
     {
         public Action(IMediator mediator)
@@ -23,7 +24,7 @@ public static class RegisterNewMeetupFeature
         {
         }
 
-        [HttpPost]
+        [HttpPost("/api/meetups")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public Task<IActionResult> Perform(Request request, CancellationToken cancellationToken) =>
             Mediator

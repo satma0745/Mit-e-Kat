@@ -9,14 +9,15 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
 using Mitekat.Application.Seedwork;
 using Mitekat.Model.Context;
 using Mitekat.Model.Entities;
 
+[Feature("Meetups", "Update meetup")]
 public static class UpdateMeetupFeature
 {
-    [Route("/api/meetups")]
     public class Action : ActionBase
     {
         public Action(IMediator mediator)
@@ -24,7 +25,7 @@ public static class UpdateMeetupFeature
         {
         }
 
-        [HttpPut("{MeetupId:guid}")]
+        [HttpPut("/api/meetups/{MeetupId:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public Task<IActionResult> Perform(Request request, CancellationToken cancellationToken) =>
             Mediator
