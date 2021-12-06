@@ -8,12 +8,10 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
 using Mitekat.Application.Seedwork;
-using Mitekat.Model.Context;
-using Mitekat.Model.Entities;
+using Mitekat.Domain.Aggregates.User;
 
 [Feature("Auth", "Register a new user")]
 public static class RegisterNewUserFeature
@@ -50,24 +48,27 @@ public static class RegisterNewUserFeature
 
     internal class RequestHandler : RequestHandlerBase<Request, Unit>
     {
-        public RequestHandler(MitekatContext context, IMapper mapper)
-            : base(context, mapper)
-        {
-        }
+        private readonly IUserRepository repository;
+
+        public RequestHandler(IUserRepository repository, IMapper mapper)
+            : base(mapper) =>
+            this.repository = repository;
 
         public override async Task<Response<Unit>> Handle(Request request, CancellationToken cancellationToken)
         {
-            if (await Context.Users.AnyAsync(user => user.Username == request.Properties.Username, cancellationToken))
+            if (await repository.UsernameTaken(request.Properties.Username, cancellationToken))
             {
                 return ConflictFailure();
             }
 
-            var user = Mapper.Map<User>(request.Properties);
-            user.Password = BCrypt.HashPassword(request.Properties.Password);
+            // TODO: Figure out a better way to instantiate an aggregate root from a request.
+            var user = new User(
+                request.Properties.Username,
+                request.Properties.DisplayName,
+                BCrypt.HashPassword(request.Properties.Password));
+            repository.Add(user);
             
-            Context.Users.Add(user);
-            await Context.SaveChangesAsync(cancellationToken);
-
+            await repository.SaveChanges(cancellationToken);
             return Success();
         }
     }
@@ -100,11 +101,5 @@ public static class RegisterNewUserFeature
                     .MaximumLength(20);
             }
         }
-    }
-
-    internal class MappingProfile : Profile
-    {
-        public MappingProfile() =>
-            CreateMap<Request.UserProperties, User>();
     }
 }

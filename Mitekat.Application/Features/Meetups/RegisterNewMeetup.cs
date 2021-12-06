@@ -11,8 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
 using Mitekat.Application.Seedwork;
-using Mitekat.Model.Context;
-using Mitekat.Model.Entities;
+using Mitekat.Domain.Aggregates.Meetup;
 
 [Feature("Meetups", "Register a new meetup")]
 public static class RegisterNewMeetupFeature
@@ -47,18 +46,24 @@ public static class RegisterNewMeetupFeature
     
     internal class RequestHandler : RequestHandlerBase<Request, Unit>
     {
-        public RequestHandler(MitekatContext context, IMapper mapper)
-            : base(context, mapper)
-        {
-        }
+        private readonly IMeetupRepository repository;
+
+        public RequestHandler(IMeetupRepository repository, IMapper mapper)
+            : base(mapper) =>
+            this.repository = repository;
 
         public override async Task<Response<Unit>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var meetup = Mapper.Map<Meetup>(request.Properties);
-        
-            Context.Meetups.Add(meetup);
-            await Context.SaveChangesAsync(cancellationToken);
-        
+            // TODO: Figure out a better way to instantiate an aggregate root from a request.
+            var meetup = new Meetup(
+                request.Properties.Title,
+                request.Properties.Description,
+                request.Properties.Speaker,
+                TimeSpan.FromMinutes(request.Properties.Duration),
+                request.Properties.StartTime);
+            repository.Add(meetup);
+            
+            await repository.SaveChanges(cancellationToken);
             return Success();
         }
     }
@@ -96,14 +101,5 @@ public static class RegisterNewMeetupFeature
                 RuleFor(request => request.StartTime).NotEmpty();
             }
         }
-    }
-
-    internal class MappingProfile : Profile
-    {
-        public MappingProfile() =>
-            CreateMap<Request.MeetupProperties, Meetup>()
-                .ForMember(
-                    meetup => meetup.Duration,
-                    options => options.MapFrom(properties => TimeSpan.FromMinutes(properties.Duration)));
     }
 }

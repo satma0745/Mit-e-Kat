@@ -1,4 +1,4 @@
-﻿namespace Mitekat.Model.Migrations;
+﻿namespace Mitekat.Application.Persistence.Migrations;
 
 using System;
 using Microsoft.EntityFrameworkCore.Migrations;

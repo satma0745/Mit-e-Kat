@@ -1,7 +1,5 @@
 ﻿namespace Mitekat.Application.Features.Auth;
 
-using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,13 +8,11 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
 using Mitekat.Application.Helpers;
 using Mitekat.Application.Seedwork;
-using Mitekat.Model.Context;
-using Mitekat.Model.Entities;
+using Mitekat.Domain.Aggregates.User;
 
 [Feature("Auth", "Authenticate user")]
 public static class Authenticate
@@ -58,16 +54,18 @@ public static class Authenticate
     internal class RequestHandler : RequestHandlerBase<Request, ViewModel>
     {
         private readonly AuthTokenHelper tokenHelper;
-        
-        public RequestHandler(MitekatContext context, IMapper mapper, AuthTokenHelper tokenHelper)
-            : base(context, mapper) =>
+        private readonly IUserRepository repository;
+
+        public RequestHandler(IUserRepository repository, IMapper mapper, AuthTokenHelper tokenHelper)
+            : base(mapper)
+        {
             this.tokenHelper = tokenHelper;
+            this.repository = repository;
+        }
 
         public override async Task<Response<ViewModel>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var user = await Context.Users
-                .Where(user => user.Username == request.Credentials.Username)
-                .SingleOrDefaultAsync(cancellationToken);
+            var user = await repository.GetSingle(request.Credentials.Username, cancellationToken);
             if (user is null)
             {
                 return NotFoundFailure();
@@ -77,13 +75,9 @@ public static class Authenticate
                 return ConflictFailure();
             }
 
-            var refreshToken = new RefreshToken
-            {
-                TokenId = Guid.NewGuid(),
-                UserId = user.Id
-            };
-            Context.RefreshTokens.Add(refreshToken);
-            await Context.SaveChangesAsync(cancellationToken);
+            var refreshToken = new RefreshToken(user.Id);
+            user.AddRefreshToken(refreshToken);
+            await repository.SaveChanges(cancellationToken);
 
             var tokenPair = tokenHelper.IssueTokenPair(user.Id, refreshToken.TokenId);
             var viewModel = Mapper.Map<ViewModel>(tokenPair);

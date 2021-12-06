@@ -4,20 +4,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using Mitekat.Model.Context;
 
 internal abstract class RequestHandlerBase<TRequest, TResource> : IRequestHandler<TRequest, Response<TResource>>
     where TRequest : IRequest<Response<TResource>>
 {
-    protected MitekatContext Context { get; }
-    
     protected IMapper Mapper { get; }
 
-    protected RequestHandlerBase(MitekatContext context, IMapper mapper)
-    {
-        Context = context;
+    protected RequestHandlerBase(IMapper mapper) =>
         Mapper = mapper;
-    }
 
     public abstract Task<Response<TResource>> Handle(TRequest request, CancellationToken cancellationToken);
 

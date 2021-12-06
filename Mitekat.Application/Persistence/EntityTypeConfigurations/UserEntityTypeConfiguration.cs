@@ -1,7 +1,8 @@
-﻿namespace Mitekat.Model.Entities;
+﻿namespace Mitekat.Application.Persistence.EntityTypeConfigurations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mitekat.Domain.Aggregates.User;
 
 internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 {
@@ -20,7 +21,8 @@ internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 
         entity
             .Property(user => user.Id)
-            .HasColumnName("id");
+            .HasColumnName("id")
+            .ValueGeneratedNever();
 
         entity
             .Property(user => user.Username)

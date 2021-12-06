@@ -1,7 +1,8 @@
-﻿namespace Mitekat.Model.Entities;
+﻿namespace Mitekat.Application.Persistence.EntityTypeConfigurations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mitekat.Domain.Aggregates.User;
 
 internal class RefreshTokenEntityTypeConfiguration : IEntityTypeConfiguration<RefreshToken>
 {
@@ -19,7 +20,8 @@ internal class RefreshTokenEntityTypeConfiguration : IEntityTypeConfiguration<Re
 
         entity
             .Property(refreshToken => refreshToken.TokenId)
-            .HasColumnName("token_id");
+            .HasColumnName("token_id")
+            .ValueGeneratedNever();
 
         entity
             .Property(refreshToken => refreshToken.UserId)
@@ -27,7 +29,7 @@ internal class RefreshTokenEntityTypeConfiguration : IEntityTypeConfiguration<Re
 
         entity
             .HasOne<User>()
-            .WithMany()
+            .WithMany(user => user.RefreshTokens)
             .HasForeignKey(refreshToken => refreshToken.UserId)
             .HasConstraintName("fk_refresh_tokens_users");
     }

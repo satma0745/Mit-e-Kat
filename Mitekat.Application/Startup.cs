@@ -7,12 +7,17 @@ using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
 using Mitekat.Application.Helpers;
-using Mitekat.Model.Extensions.DependencyInjection;
+using Mitekat.Application.Persistence.Context;
+using Mitekat.Application.Persistence.Repositories;
+using Mitekat.Domain.Aggregates.Meetup;
+using Mitekat.Domain.Aggregates.User;
 
 internal class Startup
 {
@@ -25,7 +30,17 @@ internal class Startup
                 options.OperationFilter<SwaggerFeatureConvention>();
             })
             .AddFluentValidationRulesToSwagger()
-            .AddMitekatContext()
+            .AddDbContext<MitekatContext>((serviceProvider, options) =>
+            {
+                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                var connectionString = configuration.GetConnectionString("PostgreSQL");
+
+                var modelsAssembly = Assembly.GetExecutingAssembly().FullName;
+
+                options.UseNpgsql(connectionString, builder => builder.MigrationsAssembly(modelsAssembly));
+            })
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IMeetupRepository, MeetupRepository>()
             .AddScoped<AuthTokenHelper>()
             .AddAutoMapper(Assembly.GetExecutingAssembly())
             .AddMediatR(Assembly.GetExecutingAssembly())

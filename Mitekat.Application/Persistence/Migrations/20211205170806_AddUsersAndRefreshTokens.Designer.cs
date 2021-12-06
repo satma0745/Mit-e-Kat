@@ -1,14 +1,18 @@
-﻿namespace Mitekat.Model.Migrations;
+﻿namespace Mitekat.Application.Persistence.Migrations;
 
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Mitekat.Model.Context;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Mitekat.Application.Persistence.Context;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 [DbContext(typeof(MitekatContext))]
-internal class MitekatContextModelSnapshot : ModelSnapshot
+[Migration("20211205170806_AddUsersAndRefreshTokens")]
+partial class AddUsersAndRefreshTokens
 {
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
         modelBuilder
             .HasAnnotation("ProductVersion", "6.0.0")

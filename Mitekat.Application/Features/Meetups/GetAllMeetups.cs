@@ -8,12 +8,10 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
 using Mitekat.Application.Seedwork;
-using Mitekat.Model.Context;
-using Mitekat.Model.Entities;
+using Mitekat.Domain.Aggregates.Meetup;
 
 [Feature("Meetups", "Get all meetups")]
 public static class GetAllMeetupsFeature
@@ -49,16 +47,18 @@ public static class GetAllMeetupsFeature
     
     internal class RequestHandler : RequestHandlerBase<Request, ICollection<ViewModel>>
     {
-        public RequestHandler(MitekatContext context, IMapper mapper)
-            : base(context, mapper)
-        {
-        }
+        // TODO: Consider defining Repository property in the RequestHandlerBase.
+        private readonly IMeetupRepository repository;
+        
+        public RequestHandler(IMeetupRepository repository, IMapper mapper)
+            : base(mapper) =>
+            this.repository = repository;
 
         public override async Task<Response<ICollection<ViewModel>>> Handle(
             Request _,
             CancellationToken cancellationToken)
         {
-            var meetups = await Context.Meetups.AsNoTracking().ToListAsync(cancellationToken);
+            var meetups = await repository.GetAll(cancellationToken);
             var viewModels = Mapper.Map<ICollection<ViewModel>>(meetups);
             return Success(viewModels);
         }

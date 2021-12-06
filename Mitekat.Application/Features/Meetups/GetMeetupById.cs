@@ -7,12 +7,10 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
 using Mitekat.Application.Seedwork;
-using Mitekat.Model.Context;
-using Mitekat.Model.Entities;
+using Mitekat.Domain.Aggregates.Meetup;
 
 [Feature("Meetups", "Get meetup by id")]
 public static class GetMeetupByIdFeature
@@ -57,17 +55,15 @@ public static class GetMeetupByIdFeature
 
     internal class RequestHandler : RequestHandlerBase<Request, ViewModel>
     {
-        public RequestHandler(MitekatContext context, IMapper mapper)
-            : base(context, mapper)
-        {
-        }
+        private readonly IMeetupRepository repository;
+
+        public RequestHandler(IMeetupRepository repository, IMapper mapper)
+            : base(mapper) =>
+            this.repository = repository;
 
         public override async Task<Response<ViewModel>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var meetup = await Context.Meetups
-                .AsNoTracking()
-                .SingleOrDefaultAsync(meetup => meetup.Id == request.MeetupId, cancellationToken);
-            
+            var meetup = await repository.GetSingle(request.MeetupId, cancellationToken);
             if (meetup is null)
             {
                 return NotFoundFailure();

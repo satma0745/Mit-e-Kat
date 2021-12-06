@@ -1,16 +1,15 @@
-﻿namespace Mitekat.Model.Context;
+﻿namespace Mitekat.Application.Persistence.Context;
 
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Mitekat.Model.Entities;
+using Mitekat.Domain.Aggregates.Meetup;
+using Mitekat.Domain.Aggregates.User;
 
-public class MitekatContext : DbContext
+internal class MitekatContext : DbContext
 {
     public DbSet<Meetup> Meetups { get; set; }
     
     public DbSet<User> Users { get; set; }
-    
-    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public MitekatContext(DbContextOptions<MitekatContext> options)
         : base(options)

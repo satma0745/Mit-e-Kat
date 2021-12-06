@@ -1,11 +1,11 @@
-﻿namespace Mitekat.Model.Migrations;
+﻿namespace Mitekat.Application.Persistence.Migrations;
 
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mitekat.Model.Context;
+using Mitekat.Application.Persistence.Context;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 [DbContext(typeof(MitekatContext))]

@@ -1,7 +1,8 @@
-﻿namespace Mitekat.Model.Entities;
+﻿namespace Mitekat.Application.Persistence.EntityTypeConfigurations;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mitekat.Domain.Aggregates.Meetup;
 
 internal class MeetupEntityTypeConfiguration : IEntityTypeConfiguration<Meetup>
 {
@@ -15,7 +16,8 @@ internal class MeetupEntityTypeConfiguration : IEntityTypeConfiguration<Meetup>
 
         entity
             .Property(meetup => meetup.Id)
-            .HasColumnName("id");
+            .HasColumnName("id")
+            .ValueGeneratedNever();
 
         entity
             .Property(meetup => meetup.Title)
