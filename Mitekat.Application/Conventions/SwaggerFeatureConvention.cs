@@ -15,7 +15,7 @@ internal class SwaggerFeatureConvention : IOperationFilter
             return;
         }
 
-        var featureAttribute = actionClassType.DeclaringType?.GetAttribute<FeatureAttribute>();
+        var featureAttribute = actionClassType.GetAttribute<FeatureAttribute>();
         if (featureAttribute is null)
         {
             return;

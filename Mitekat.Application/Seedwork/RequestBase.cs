@@ -2,6 +2,4 @@
 
 using MediatR;
 
-public class RequestBase<TResource> : IRequest<Response<TResource>>
-{
-}
+public record RequestBase<TResource> : IRequest<Response<TResource>>;

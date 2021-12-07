@@ -7,6 +7,10 @@ using JWT.Algorithms;
 using JWT.Builder;
 using Microsoft.Extensions.Configuration;
 
+public record TokenPair(string AccessToken, string RefreshToken);
+
+internal record RefreshTokenPayload(Guid UserId, Guid TokenId);
+
 internal class AuthTokenHelper
 {
     private JwtBuilder TokenBuilder => JwtBuilder
@@ -28,8 +32,6 @@ internal class AuthTokenHelper
         var refreshTokenLifeTimeInDays = int.Parse(configuration["Auth:RefreshTokenLifetime"]);
         refreshTokenLifetime = TimeSpan.FromDays(refreshTokenLifeTimeInDays);
     }
-
-    public record TokenPair(string AccessToken, string RefreshToken);
     
     public TokenPair IssueTokenPair(Guid userId, Guid refreshTokenId)
     {
@@ -46,8 +48,6 @@ internal class AuthTokenHelper
 
         return new TokenPair(accessToken, refreshToken);
     }
-    
-    public record RefreshTokenPayload(Guid UserId, Guid TokenId);
 
     public RefreshTokenPayload ParseRefreshToken(string refreshToken)
     {

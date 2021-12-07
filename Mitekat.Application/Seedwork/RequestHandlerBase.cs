@@ -2,17 +2,11 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 
 internal abstract class RequestHandlerBase<TRequest, TResource> : IRequestHandler<TRequest, Response<TResource>>
     where TRequest : IRequest<Response<TResource>>
 {
-    protected IMapper Mapper { get; }
-
-    protected RequestHandlerBase(IMapper mapper) =>
-        Mapper = mapper;
-
     public abstract Task<Response<TResource>> Handle(TRequest request, CancellationToken cancellationToken);
 
     protected static Response<TResource> Success(TResource resource) =>
