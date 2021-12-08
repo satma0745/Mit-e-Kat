@@ -11,8 +11,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using Mitekat.Application.Behaviors;
 using Mitekat.Application.Conventions;
 using Mitekat.Application.Extensions;
+using Mitekat.Application.Filters;
 using Mitekat.Application.Helpers;
 using Mitekat.Application.Persistence.Context;
 using Mitekat.Application.Persistence.Repositories;
@@ -28,6 +31,15 @@ internal class Startup
             {
                 options.CustomSchemaIds(type => type.FullName);
                 options.OperationFilter<SwaggerFeatureConvention>();
+                
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "Put Your access token here (drop **Bearer** prefix):",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+                options.OperationFilter<SwaggerAuthenticationRequirementFilter>();
             })
             .AddFluentValidationRulesToSwagger()
             .AddDbContext<MitekatContext>((serviceProvider, options) =>
@@ -44,6 +56,7 @@ internal class Startup
             .AddScoped<AuthTokenHelper>()
             .AddAutoMapper(Assembly.GetExecutingAssembly())
             .AddMediatR(Assembly.GetExecutingAssembly())
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthenticationBehavior<,>))
             .Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressInferBindingSourcesForParameters = true;
