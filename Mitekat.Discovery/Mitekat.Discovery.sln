@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitekat.Discovery.Domain", "Mitekat.Discovery.Domain\Mitekat.Discovery.Domain.csproj", "{6F55660E-683B-4C9F-A456-235DE9AAE04E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitekat.Discovery.Core", "Mitekat.Discovery.Core\Mitekat.Discovery.Core.csproj", "{5DA68653-1471-479F-B4FC-8F1C27205AA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitekat.Discovery.Persistence", "Mitekat.Discovery.Persistence\Mitekat.Discovery.Persistence.csproj", "{E5892683-16B6-442A-9F5B-9238028E2AAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitekat.Discovery.Helpers", "Mitekat.Discovery.Helpers\Mitekat.Discovery.Helpers.csproj", "{478C98C5-9F85-4077-A614-8C0FB25D8F24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitekat.Discovery.Web", "Mitekat.Discovery.Web\Mitekat.Discovery.Web.csproj", "{CF508A4D-40AC-4F8D-9A40-90DE1E02CE3B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F55660E-683B-4C9F-A456-235DE9AAE04E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F55660E-683B-4C9F-A456-235DE9AAE04E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F55660E-683B-4C9F-A456-235DE9AAE04E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F55660E-683B-4C9F-A456-235DE9AAE04E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DA68653-1471-479F-B4FC-8F1C27205AA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DA68653-1471-479F-B4FC-8F1C27205AA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DA68653-1471-479F-B4FC-8F1C27205AA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DA68653-1471-479F-B4FC-8F1C27205AA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5892683-16B6-442A-9F5B-9238028E2AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5892683-16B6-442A-9F5B-9238028E2AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5892683-16B6-442A-9F5B-9238028E2AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5892683-16B6-442A-9F5B-9238028E2AAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{478C98C5-9F85-4077-A614-8C0FB25D8F24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{478C98C5-9F85-4077-A614-8C0FB25D8F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{478C98C5-9F85-4077-A614-8C0FB25D8F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{478C98C5-9F85-4077-A614-8C0FB25D8F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF508A4D-40AC-4F8D-9A40-90DE1E02CE3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF508A4D-40AC-4F8D-9A40-90DE1E02CE3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF508A4D-40AC-4F8D-9A40-90DE1E02CE3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF508A4D-40AC-4F8D-9A40-90DE1E02CE3B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

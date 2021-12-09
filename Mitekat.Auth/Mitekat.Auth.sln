@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitekat.Auth.Core", "Mitekat.Auth.Core\Mitekat.Auth.Core.csproj", "{A7A6DCBB-77D6-467C-93BF-892B4D54B58F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitekat.Auth.Domain", "Mitekat.Auth.Domain\Mitekat.Auth.Domain.csproj", "{DDEAB10F-DD95-4CDA-86F3-6DF41C367C44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitekat.Auth.Persistence", "Mitekat.Auth.Persistence\Mitekat.Auth.Persistence.csproj", "{2A50A7B4-1F7B-4944-A223-E0EC40E949FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitekat.Auth.Helpers", "Mitekat.Auth.Helpers\Mitekat.Auth.Helpers.csproj", "{34B7B7E5-1E27-4F01-85D4-B129A2C4EB5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mitekat.Auth.Web", "Mitekat.Auth.Web\Mitekat.Auth.Web.csproj", "{6569DE8F-FA2A-43D0-8804-CA675C9749F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7A6DCBB-77D6-467C-93BF-892B4D54B58F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7A6DCBB-77D6-467C-93BF-892B4D54B58F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7A6DCBB-77D6-467C-93BF-892B4D54B58F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7A6DCBB-77D6-467C-93BF-892B4D54B58F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDEAB10F-DD95-4CDA-86F3-6DF41C367C44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDEAB10F-DD95-4CDA-86F3-6DF41C367C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDEAB10F-DD95-4CDA-86F3-6DF41C367C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDEAB10F-DD95-4CDA-86F3-6DF41C367C44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A50A7B4-1F7B-4944-A223-E0EC40E949FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A50A7B4-1F7B-4944-A223-E0EC40E949FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A50A7B4-1F7B-4944-A223-E0EC40E949FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A50A7B4-1F7B-4944-A223-E0EC40E949FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34B7B7E5-1E27-4F01-85D4-B129A2C4EB5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34B7B7E5-1E27-4F01-85D4-B129A2C4EB5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34B7B7E5-1E27-4F01-85D4-B129A2C4EB5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34B7B7E5-1E27-4F01-85D4-B129A2C4EB5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6569DE8F-FA2A-43D0-8804-CA675C9749F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6569DE8F-FA2A-43D0-8804-CA675C9749F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6569DE8F-FA2A-43D0-8804-CA675C9749F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6569DE8F-FA2A-43D0-8804-CA675C9749F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

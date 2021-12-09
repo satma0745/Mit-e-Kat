@@ -1,6 +1,6 @@
 ﻿.idea
 
-Mitekat.*/bin
-Mitekat.*/obj
+Mitekat.*/Mitekat.*.*/bin
+Mitekat.*/Mitekat.*.*/obj
 
-Mitekat.Web/Properties/appSettings.*.json
+Mitekat.*/Mitekat.*.Web/Properties/appSettings.*.json

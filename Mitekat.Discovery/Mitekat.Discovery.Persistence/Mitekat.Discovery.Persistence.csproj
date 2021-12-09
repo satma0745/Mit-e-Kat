@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mitekat.Discovery.Core\Mitekat.Discovery.Core.csproj" />
+      <ProjectReference Include="..\Mitekat.Discovery.Domain\Mitekat.Discovery.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

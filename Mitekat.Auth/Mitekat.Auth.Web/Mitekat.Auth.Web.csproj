@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.4.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Mitekat.Auth.Core\Mitekat.Auth.Core.csproj" />
+      <ProjectReference Include="..\Mitekat.Auth.Helpers\Mitekat.Auth.Helpers.csproj" />
+      <ProjectReference Include="..\Mitekat.Auth.Persistence\Mitekat.Auth.Persistence.csproj" />
+    </ItemGroup>
+
+</Project>
