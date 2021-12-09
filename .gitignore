@@ -3,4 +3,4 @@
 Mitekat.*/bin
 Mitekat.*/obj
 
-Mitekat.*/appsettings.Development.json
+Mitekat.Web/Properties/appSettings.*.json
