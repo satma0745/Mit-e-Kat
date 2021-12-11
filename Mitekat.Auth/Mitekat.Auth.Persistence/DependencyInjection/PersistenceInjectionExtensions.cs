@@ -19,7 +19,12 @@ public static class PersistenceInjectionExtensions
         services.AddDbContext<AuthContext>((serviceProvider, options) =>
         {
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            var connectionString = configuration.GetConnectionString("PostgreSQL");
+            var server = configuration["Persistence:Server"];
+            var port = configuration["Persistence:Port"];
+            var db = configuration["Persistence:Database"];
+            var username = configuration["Persistence:Username"];
+            var password = configuration["Persistence:Password"];
+            var connectionString = $"Server={server};Port={port};Database={db};User Id={username};Password={password};";
 
             var modelsAssembly = Assembly.GetExecutingAssembly().FullName;
 
