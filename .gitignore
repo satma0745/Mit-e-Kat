@@ -4,3 +4,5 @@ Mitekat.*/Mitekat.*.*/bin
 Mitekat.*/Mitekat.*.*/obj
 
 Mitekat.*/Mitekat.*.Web/Properties/appSettings.*.json
+
+docker-compose.env

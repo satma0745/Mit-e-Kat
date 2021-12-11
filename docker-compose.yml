@@ -1,0 +1,59 @@
+services:
+  mitekat-auth-app:
+    build: ./Mitekat.Auth/
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Auth__Secret: $JWT_SECRET
+      Auth__AccessTokenLifetime: $JWT_ACCESS_TOKEN_LIFETIME
+      Auth__RefreshTokenLifetime: $JWT_REFRESH_TOKEN_LIFETIME
+      Persistence__Server: mitekat-auth-db
+      Persistence__Port: $AUTH_DB_INTERNAL_PORT
+      Persistence__Database: postgres
+      Persistence__Username: postgres
+      Persistence__Password: $AUTH_DB_PASSWORD
+    depends_on:
+      - mitekat-auth-db
+    ports:
+      - $AUTH_APP_EXTERNAL_PORT:80
+  mitekat-auth-db:
+    image: postgres:14
+    command: -p $AUTH_DB_INTERNAL_PORT
+    environment:
+      POSTGRES_PASSWORD: $AUTH_DB_PASSWORD
+    volumes:
+      - pg-auth-data:/var/lib/postgresql/data
+    ports:
+      - $AUTH_DB_EXTERNAL_PORT:$AUTH_DB_INTERNAL_PORT
+    expose:
+      - $AUTH_DB_INTERNAL_PORT
+  mitekat-discovery-app:
+    build: ./Mitekat.Discovery/
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Auth__Secret: $JWT_SECRET
+      Persistence__Server: mitekat-discovery-db
+      Persistence__Port: $DISCOVERY_DB_INTERNAL_PORT
+      Persistence__Database: postgres
+      Persistence__Username: postgres
+      Persistence__Password: $DISCOVERY_DB_PASSWORD
+    depends_on:
+      - mitekat-discovery-db
+    ports:
+      - $DISCOVERY_APP_EXTERNAL_PORT:80
+  mitekat-discovery-db:
+    image: postgres:14
+    command: -p $DISCOVERY_DB_INTERNAL_PORT
+    environment:
+      POSTGRES_PASSWORD: $DISCOVERY_DB_PASSWORD
+    volumes:
+      - pg-discovery-data:/var/lib/postgresql/data
+    ports:
+      - $DISCOVERY_DB_EXTERNAL_PORT:$DISCOVERY_DB_INTERNAL_PORT
+    expose:
+      - $DISCOVERY_DB_INTERNAL_PORT
+
+volumes:
+  pg-auth-data:
+    driver: local
+  pg-discovery-data:
+    driver: local
