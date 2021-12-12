@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text.Json;
 using JWT.Algorithms;
 using JWT.Builder;
-using Microsoft.Extensions.Configuration;
 using Mitekat.Auth.Core.Abstractions.Helpers;
 
 internal class TokenHelper : ITokenHelper
@@ -14,34 +13,24 @@ internal class TokenHelper : ITokenHelper
     private JwtBuilder TokenBuilder => JwtBuilder
         .Create()
         .WithAlgorithm(new HMACSHA512Algorithm())
-        .WithSecret(secret);
+        .WithSecret(configuration.Secret);
 
-    private readonly string secret;
-    private readonly TimeSpan accessTokenLifetime;
-    private readonly TimeSpan refreshTokenLifetime;
+    private readonly AuthConfiguration configuration;
 
-    public TokenHelper(IConfiguration configuration)
-    {
-        secret = configuration["Auth:Secret"];
-
-        var accessTokenLifetimeInMinutes = int.Parse(configuration["Auth:AccessTokenLifetime"]);
-        accessTokenLifetime = TimeSpan.FromMinutes(accessTokenLifetimeInMinutes);
-
-        var refreshTokenLifeTimeInDays = int.Parse(configuration["Auth:RefreshTokenLifetime"]);
-        refreshTokenLifetime = TimeSpan.FromDays(refreshTokenLifeTimeInDays);
-    }
+    public TokenHelper(AuthConfiguration configuration) =>
+        this.configuration = configuration;
     
     public TokenPair IssueTokenPair(Guid userId, Guid refreshTokenId)
     {
         var accessToken = TokenBuilder
             .AddClaim("sub", userId)
-            .AddClaim("exp", DateTimeOffset.UtcNow.Add(accessTokenLifetime).ToUnixTimeSeconds())
+            .AddClaim("exp", DateTimeOffset.UtcNow.Add(configuration.AccessTokenLifetime).ToUnixTimeSeconds())
             .Encode();
 
         var refreshToken = TokenBuilder
             .AddClaim("sub", userId)
             .AddClaim("jti", refreshTokenId)
-            .AddClaim("exp", DateTimeOffset.UtcNow.Add(refreshTokenLifetime).ToUnixTimeSeconds())
+            .AddClaim("exp", DateTimeOffset.UtcNow.Add(configuration.RefreshTokenLifetime).ToUnixTimeSeconds())
             .Encode();
 
         return new TokenPair(accessToken, refreshToken);

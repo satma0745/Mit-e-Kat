@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text.Json;
 using JWT.Algorithms;
 using JWT.Builder;
-using Microsoft.Extensions.Configuration;
 using Mitekat.Discovery.Core.Abstraction.Helpers;
 
 internal class TokenHelper : ITokenHelper
@@ -14,12 +13,12 @@ internal class TokenHelper : ITokenHelper
     private JwtBuilder TokenBuilder => JwtBuilder
         .Create()
         .WithAlgorithm(new HMACSHA512Algorithm())
-        .WithSecret(secret);
+        .WithSecret(configuration.Secret);
 
-    private readonly string secret;
+    private readonly AuthConfiguration configuration;
 
-    public TokenHelper(IConfiguration configuration) =>
-        secret = configuration["Auth:Secret"];
+    public TokenHelper(AuthConfiguration configuration) =>
+        this.configuration = configuration;
 
     public AccessTokenPayload ParseAccessToken(string accessToken)
     {
