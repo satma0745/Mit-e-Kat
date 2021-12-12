@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <PackageVersion>0.1.0</PackageVersion>
+        <Title>Mitekat.Seedwork</Title>
+        <Authors>satma0745</Authors>
+        <Description>Common components (classes, interfaces, extensions, etc.) for Mit-e-Kat project.</Description>
+        <PackageTags>mitekat, seedwork</PackageTags>
+        <Copyright>satma0745</Copyright>
+        <PackageProjectUrl>https://github.com/satma0745/MitekatSlice</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/satma0745/MitekatSlice</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
+      <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.5" />
+      <PackageReference Include="JWT" Version="8.7.0" />
+      <PackageReference Include="MediatR" Version="9.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include=".\LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
+    </ItemGroup>
+
+</Project>

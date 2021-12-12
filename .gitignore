@@ -1,8 +1,8 @@
 ﻿.idea
 
-Mitekat.*/Mitekat.*.*/bin
-Mitekat.*/Mitekat.*.*/obj
+Mitekat.*/**/bin
+Mitekat.*/**/obj
 
-Mitekat.*/Mitekat.*.Web/Properties/appSettings.*.json
+Mitekat.*/Mitekat.*.Application/Properties/appSettings.*.json
 
 docker-compose.env
