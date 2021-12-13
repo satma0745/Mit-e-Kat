@@ -3,12 +3,16 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mitekat.Discovery.Application.Persistence.Context;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 [DbContext(typeof(DiscoveryContext))]
-internal class DiscoveryContextModelSnapshot : ModelSnapshot
+[Migration("20211213082755_AddSignedUpUsers")]
+partial class AddSignedUpUsers
 {
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
         modelBuilder
             .HasAnnotation("ProductVersion", "6.0.0")

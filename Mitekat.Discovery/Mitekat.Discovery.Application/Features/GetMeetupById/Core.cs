@@ -1,6 +1,8 @@
 ﻿namespace Mitekat.Discovery.Application.Features.GetMeetupById;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -17,7 +19,15 @@ internal record MeetupViewModel(
     string Speaker,
     // TODO: Fix TimeSpan swagger example.
     TimeSpan Duration,
-    DateTime StartTime);
+    DateTime StartTime,
+    ICollection<Guid> SignedUpUserIds)
+{
+    // For AutoMapper
+    private MeetupViewModel()
+        : this(default, default, default, default, default, default, default)
+    {
+    }
+}
 
 internal class RequestHandler : RequestHandlerBase<Request, MeetupViewModel>
 {
@@ -46,5 +56,8 @@ internal class RequestHandler : RequestHandlerBase<Request, MeetupViewModel>
 internal class MappingProfile : Profile
 {
     public MappingProfile() =>
-        CreateMap<Meetup, MeetupViewModel>();
+        CreateMap<Meetup, MeetupViewModel>()
+            .ForMember(
+                model => model.SignedUpUserIds,
+                options => options.MapFrom(meetup => meetup.SignedUpUsers.Select(user => user.Id)));
 }

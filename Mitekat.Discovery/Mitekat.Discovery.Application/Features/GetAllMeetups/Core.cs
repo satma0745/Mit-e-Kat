@@ -18,7 +18,15 @@ internal record MeetupViewModel(
     string Speaker,
     // TODO: Fix TimeSpan swagger example.
     TimeSpan Duration,
-    DateTime StartTime);
+    DateTime StartTime,
+    int SignedUp)
+{
+    // For AutoMapper
+    private MeetupViewModel()
+        : this(default, default, default, default, default, default, default)
+    {
+    }
+}
 
 internal class RequestHandler : RequestHandlerBase<Request, ICollection<MeetupViewModel>>
 {
@@ -44,5 +52,6 @@ internal class RequestHandler : RequestHandlerBase<Request, ICollection<MeetupVi
 internal class MappingProfile : Profile
 {
     public MappingProfile() =>
-        CreateMap<Meetup, MeetupViewModel>();
+        CreateMap<Meetup, MeetupViewModel>()
+            .ForMember(model => model.SignedUp, options => options.MapFrom(meetup => meetup.SignedUpUsers.Count));
 }
