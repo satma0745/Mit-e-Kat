@@ -1,4 +1,4 @@
-﻿namespace Mitekat.Auth.Application.Features.RegisterNewUser;
+﻿namespace Mitekat.Auth.Application.Features.UpdateCredentials;
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Mitekat.Seedwork.Features.Actions;
 using Mitekat.Seedwork.Features.Requesting;
 
-public record RequestBody(string Username, string Password, string DisplayName);
+public record RequestBody(string Username, string Password);
 
-[Feature("Auth", "Register a new user")]
+[Feature("Auth", "Update user credentials")]
 public class Action : ActionBase
 {
     private readonly IMediator mediator;
@@ -24,17 +24,21 @@ public class Action : ActionBase
         this.mapper = mapper;
     }
 
-    [HttpPost("/api/auth/users/register")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [HttpPut("/api/auth/users/self/credentials")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public Task<IActionResult> Perform([FromBody] RequestBody requestBody, CancellationToken cancellationToken) =>
         mediator
-            .SendAsync(mapper.Map<Request>(requestBody), cancellationToken)
+            .SendAsync(() =>
+            {
+                var request = new Request(AccessToken);
+                return mapper.Map(requestBody, request);
+            }, cancellationToken)
             .ToActionResult(
-                onSuccess: Created,
+                onSuccess: _ => Ok(),
                 error => error switch
                 {
-                    Error.ConflictError => Conflict(),
+                    Error.UnauthorizedError => Unauthorized(),
                     _ => InternalServerError()
                 });
 }
@@ -48,11 +52,6 @@ internal class RequestBodyValidator : AbstractValidator<RequestBody>
             .NotEmpty()
             .MinimumLength(6)
             .MaximumLength(20);
-
-        RuleFor(properties => properties.DisplayName)
-            .NotEmpty()
-            .MinimumLength(6)
-            .MaximumLength(35);
 
         RuleFor(properties => properties.Password)
             .NotEmpty()

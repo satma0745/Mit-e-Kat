@@ -36,4 +36,6 @@ public record Error
     public sealed record ConflictError : Error;
 
     public sealed record UnauthorizedError : Error;
+    
+    public sealed record AccessDeniedError : Error;
 }

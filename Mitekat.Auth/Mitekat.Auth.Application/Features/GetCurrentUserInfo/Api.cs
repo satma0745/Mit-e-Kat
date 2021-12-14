@@ -16,7 +16,7 @@ public class Action : ActionBase
     public Action(IMediator mediator) =>
         this.mediator = mediator;
     
-    [HttpGet("/api/auth/who-am-i")]
+    [HttpGet("/api/auth/users/self")]
     [ProducesResponseType(typeof(UserInfo), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public Task<IActionResult> Perform(CancellationToken cancellationToken) =>

@@ -20,4 +20,7 @@ public abstract class RequestHandlerBase<TRequest, TResource> : IRequestHandler<
 
     protected static Response<TResource> ConflictFailure() =>
         Response<TResource>.Failure(new Error.ConflictError());
+
+    protected static Response<TResource> AccessDeniedFailure() =>
+        Response<TResource>.Failure(new Error.AccessDeniedError());
 }

@@ -1,6 +1,5 @@
 ﻿namespace Mitekat.Auth.Application.EntryPoint;
 
-using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
