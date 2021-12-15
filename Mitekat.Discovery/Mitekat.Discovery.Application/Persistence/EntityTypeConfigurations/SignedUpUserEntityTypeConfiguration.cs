@@ -8,14 +8,16 @@ internal class SignedUpUserEntityTypeConfiguration : IEntityTypeConfiguration<Si
 {
     public void Configure(EntityTypeBuilder<SignedUpUser> entity)
     {
+        const string meetupIdClrPropertyName = "MeetupId";
+        
         entity.ToTable("signed_up_users");
 
         entity
-            .HasKey(user => user.Id)
+            .HasKey(nameof(SignedUpUser.Id), meetupIdClrPropertyName)
             .HasName("pk_signed_up_users");
 
         entity
-            .HasIndex("MeetupId")
+            .HasIndex(meetupIdClrPropertyName)
             .IsUnique()
             .HasDatabaseName("uix_signed_up_users_meetup_id");
 
@@ -25,13 +27,13 @@ internal class SignedUpUserEntityTypeConfiguration : IEntityTypeConfiguration<Si
             .ValueGeneratedNever();
 
         entity
-            .Property("MeetupId")
+            .Property(meetupIdClrPropertyName)
             .HasColumnName("meetup_id");
 
         entity
             .HasOne<Meetup>()
             .WithMany(meetup => meetup.SignedUpUsers)
-            .HasForeignKey("MeetupId")
+            .HasForeignKey(meetupIdClrPropertyName)
             .HasConstraintName("fk_meetups_signed_up_users");
     }
 }

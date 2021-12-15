@@ -3,12 +3,14 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Mitekat.Discovery.Application.Persistence.Context;
 
 [DbContext(typeof(DiscoveryContext))]
-internal class DiscoveryContextModelSnapshot : ModelSnapshot
+[Migration("20211215194403_FixSignedUpUsersPK")]
+partial class FixSignedUpUsersPK
 {
-    protected override void BuildModel(ModelBuilder modelBuilder)
+    protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
         modelBuilder
             .HasAnnotation("ProductVersion", "6.0.0")
@@ -78,16 +80,16 @@ internal class DiscoveryContextModelSnapshot : ModelSnapshot
             signedUpUserEntity.ToTable("signed_up_users");
         });
 
-        modelBuilder.Entity(
-            "Mitekat.Discovery.Domain.Aggregates.Meetup.SignedUpUser",
-            signedUpUserEntity =>
-                signedUpUserEntity
-                    .HasOne("Mitekat.Discovery.Domain.Aggregates.Meetup.Meetup", null)
-                    .WithMany("SignedUpUsers")
-                    .HasForeignKey("MeetupId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired()
-                    .HasConstraintName("fk_meetups_signed_up_users"));
+        modelBuilder.Entity("Mitekat.Discovery.Domain.Aggregates.Meetup.SignedUpUser", signedUpUserEntity =>
+        {
+            signedUpUserEntity
+                .HasOne("Mitekat.Discovery.Domain.Aggregates.Meetup.Meetup", null)
+                .WithMany("SignedUpUsers")
+                .HasForeignKey("MeetupId")
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired()
+                .HasConstraintName("fk_meetups_signed_up_users");
+        });
 
         modelBuilder.Entity(
             "Mitekat.Discovery.Domain.Aggregates.Meetup.Meetup",
