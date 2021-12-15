@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Mitekat.Seedwork.Features.Behaviors;
 
-public static class FeaturesInjectionExtensions
+internal static class FeaturesInjectionExtensions
 {
     public static IServiceCollection AddFeatures(this IServiceCollection services) =>
         services

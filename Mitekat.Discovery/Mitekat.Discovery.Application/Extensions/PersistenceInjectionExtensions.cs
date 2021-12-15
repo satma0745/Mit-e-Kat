@@ -8,7 +8,7 @@ using Mitekat.Discovery.Application.Persistence.Repositories;
 using Mitekat.Seedwork.Configuration;
 using Mitekat.Seedwork.Persistence.Configuration;
 
-public static class PersistenceInjectionExtensions
+internal static class PersistenceInjectionExtensions
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services) =>
         services

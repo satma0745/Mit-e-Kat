@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mitekat.Seedwork.Configuration;
 using Mitekat.Seedwork.Helpers.Tokens;
 
-public static class HelpersInjectionExtensions
+internal static class HelpersInjectionExtensions
 {
     public static IServiceCollection AddHelpers(this IServiceCollection services) =>
         services

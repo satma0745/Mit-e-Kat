@@ -6,7 +6,7 @@ using Mitekat.Auth.Application.Helpers.Tokens;
 using Mitekat.Seedwork.Configuration;
 using ISeedworkTokenHelper = Seedwork.Helpers.Tokens.ITokenHelper;
 
-public static class HelpersInjectionExtensions
+internal static class HelpersInjectionExtensions
 {
     public static IServiceCollection AddHelpers(this IServiceCollection services) =>
         services

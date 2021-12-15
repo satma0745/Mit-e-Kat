@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Mitekat.Discovery.Domain.Aggregates.Meetup;
 using Mitekat.Seedwork.Persistence.Repositories;
 
-public interface IMeetupRepository : IRepository
+internal interface IMeetupRepository : IRepository
 {
     Task<ICollection<Meetup>> GetAll(CancellationToken cancellationToken);
 
