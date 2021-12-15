@@ -2,15 +2,15 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <PackageVersion>0.3.0</PackageVersion>
+        <PackageVersion>0.3.1</PackageVersion>
         <Title>Mitekat.Seedwork</Title>
         <Authors>satma0745</Authors>
         <Description>Common components (classes, interfaces, extensions, etc.) for Mit-e-Kat project.</Description>
         <PackageTags>mitekat, seedwork</PackageTags>
         <Copyright>satma0745</Copyright>
-        <PackageProjectUrl>https://github.com/satma0745/MitekatSlice</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/satma0745/Mit-e-Kat</PackageProjectUrl>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-        <RepositoryUrl>https://github.com/satma0745/MitekatSlice</RepositoryUrl>
+        <RepositoryUrl>https://github.com/satma0745/Mit-e-Kat</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
