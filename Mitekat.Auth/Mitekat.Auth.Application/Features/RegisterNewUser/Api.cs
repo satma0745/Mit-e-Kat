@@ -2,7 +2,6 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -16,27 +15,31 @@ public record RequestBody(string Username, string Password, string DisplayName);
 public class Action : ActionBase
 {
     private readonly IMediator mediator;
-    private readonly IMapper mapper;
 
-    public Action(IMediator mediator, IMapper mapper)
-    {
+    public Action(IMediator mediator) =>
         this.mediator = mediator;
-        this.mapper = mapper;
-    }
 
     [HttpPost("/api/auth/users/register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public Task<IActionResult> Perform([FromBody] RequestBody requestBody, CancellationToken cancellationToken) =>
         mediator
-            .SendAsync(mapper.Map<Request>(requestBody), cancellationToken)
+            .SendAsync(CreateRequest(requestBody), cancellationToken)
             .ToActionResult(
-                onSuccess: Created,
+                onSuccess: _ => Created(),
                 error => error switch
                 {
                     Error.ConflictError => Conflict(),
                     _ => InternalServerError()
                 });
+
+    private static Request CreateRequest(RequestBody requestBody) =>
+        new()
+        {
+            Username = requestBody.Username,
+            Password = requestBody.Password,
+            DisplayName = requestBody.DisplayName
+        };
 }
 
 internal class RequestBodyValidator : AbstractValidator<RequestBody>
@@ -59,10 +62,4 @@ internal class RequestBodyValidator : AbstractValidator<RequestBody>
             .MinimumLength(6)
             .MaximumLength(20);
     }
-}
-
-internal class MappingProfile : Profile
-{
-    public MappingProfile() =>
-        CreateMap<RequestBody, Request>();
 }

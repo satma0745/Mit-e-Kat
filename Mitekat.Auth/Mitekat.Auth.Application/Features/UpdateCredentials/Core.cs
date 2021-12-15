@@ -7,13 +7,13 @@ using Mitekat.Auth.Application.Helpers.Passwords;
 using Mitekat.Auth.Application.Persistence.Repositories;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal record Request(string Username, string Password) : RequestBase<Unit>
+internal class Request : RequestBase<Unit>
 {
     public override bool AuthenticationRequired => true;
 
-    public Request(string accessToken)
-        : this(default, default) =>
-        AccessToken = accessToken;
+    public string Username { get; init; }
+    
+    public string Password { get; init; }
 }
 
 internal class RequestHandler : RequestHandlerBase<Request, Unit>

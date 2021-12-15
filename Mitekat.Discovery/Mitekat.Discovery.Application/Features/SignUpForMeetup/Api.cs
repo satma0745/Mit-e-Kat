@@ -24,7 +24,7 @@ public class Action : ActionBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public Task<IActionResult> Perform([FromRoute] Guid meetupId, CancellationToken cancellationToken) =>
         mediator
-            .SendAsync(new Request(meetupId, AccessToken), cancellationToken)
+            .SendAsync(CreateRequest(meetupId), cancellationToken)
             .ToActionResult(
                 onSuccess: _ => Ok(),
                 error => error switch
@@ -34,4 +34,11 @@ public class Action : ActionBase
                     Error.ConflictError => Conflict(),
                     _ => InternalServerError()
                 });
+
+    private Request CreateRequest(Guid meetupId) =>
+        new()
+        {
+            MeetupId = meetupId,
+            AccessToken = AccessToken
+        };
 }

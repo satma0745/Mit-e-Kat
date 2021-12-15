@@ -2,7 +2,6 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,13 +16,9 @@ public record RequestBody(string Username, string Password);
 public class Action : ActionBase
 {
     private readonly IMediator mediator;
-    private readonly IMapper mapper;
     
-    public Action(IMediator mediator, IMapper mapper)
-    {
+    public Action(IMediator mediator) =>
         this.mediator = mediator;
-        this.mapper = mapper;
-    }
     
     [HttpPost("/api/auth/authenticate")]
     [ProducesResponseType(typeof(TokenPair), StatusCodes.Status200OK)]
@@ -31,7 +26,7 @@ public class Action : ActionBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public Task<IActionResult> Perform([FromBody] RequestBody requestBody, CancellationToken cancellationToken) =>
         mediator
-            .SendAsync(mapper.Map<Request>(requestBody), cancellationToken)
+            .SendAsync(CreateRequest(requestBody), cancellationToken)
             .ToActionResult(
                 onSuccess: Ok,
                 error => error switch
@@ -40,6 +35,13 @@ public class Action : ActionBase
                     Error.ConflictError => Conflict(),
                     _ => InternalServerError()
                 });
+
+    private static Request CreateRequest(RequestBody requestBody) =>
+        new()
+        {
+            Username = requestBody.Username,
+            Password = requestBody.Password
+        };
 }
 
 internal class RequestBodyValidator : AbstractValidator<RequestBody>
@@ -49,10 +51,4 @@ internal class RequestBodyValidator : AbstractValidator<RequestBody>
         RuleFor(credentials => credentials.Username).NotEmpty();
         RuleFor(credentials => credentials.Password).NotEmpty();
     }
-}
-
-internal class ApiMappingProfile : Profile
-{
-    public ApiMappingProfile() =>
-        CreateMap<RequestBody, Request>();
 }

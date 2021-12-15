@@ -8,12 +8,18 @@ using Mitekat.Discovery.Application.Persistence.Repositories;
 using Mitekat.Discovery.Domain.Aggregates.Meetup;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal record Request(
-    string Title,
-    string Description,
-    string Speaker,
-    int Duration,
-    DateTime StartTime) : RequestBase<Unit>;
+internal class Request : RequestBase<Unit>
+{
+    public string Title { get; init; }
+    
+    public string Description { get; init; }
+    
+    public string Speaker { get; init; }
+    
+    public int Duration { get; init; }
+    
+    public DateTime StartTime { get; init; }
+}
 
 internal class RequestHandler : RequestHandlerBase<Request, Unit>
 {

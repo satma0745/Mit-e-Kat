@@ -7,13 +7,19 @@ using MediatR;
 using Mitekat.Discovery.Application.Persistence.Repositories;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal record Request(Guid MeetupId) : RequestBase<Unit>
+internal class Request : RequestBase<Unit>
 {
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public string Speaker { get; set; }
-    public int Duration { get; set; }
-    public DateTime StartTime { get; set; }
+    public Guid MeetupId { get; init; }
+
+    public string Title { get; init; }
+
+    public string Description { get; init; }
+
+    public string Speaker { get; init; }
+
+    public int Duration { get; init; }
+
+    public DateTime StartTime { get; init; }
 }
 
 internal class RequestHandler : RequestHandlerBase<Request, Unit>

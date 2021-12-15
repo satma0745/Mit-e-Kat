@@ -8,13 +8,11 @@ using MediatR;
 using Mitekat.Discovery.Application.Persistence.Repositories;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal record Request(Guid MeetupId) : RequestBase<Unit>
+internal class Request : RequestBase<Unit>
 {
     public override bool AuthenticationRequired => true;
 
-    public Request(Guid meetupId, string accessToken)
-        : this(meetupId) =>
-        AccessToken = accessToken;
+    public Guid MeetupId { get; init; }
 }
 
 internal class RequestHandler : RequestHandlerBase<Request, Unit>

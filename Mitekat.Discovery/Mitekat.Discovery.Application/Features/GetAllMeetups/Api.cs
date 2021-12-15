@@ -21,5 +21,7 @@ public class Action : ActionBase
     public Task<IActionResult> Perform(CancellationToken cancellationToken) =>
         mediator
             .SendAsync(new Request(), cancellationToken)
-            .ToActionResult(Ok, InternalServerError);
+            .ToActionResult(
+                onSuccess: Ok,
+                onFailure: _ => InternalServerError());
 }

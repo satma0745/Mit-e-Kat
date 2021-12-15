@@ -15,7 +15,6 @@ internal class Startup
     public static void ConfigureServices(IServiceCollection services) =>
         services
             .AddFeatures()
-            .AddMappings()
             .AddHelpers()
             .AddPersistence()
             .AddSwagger()

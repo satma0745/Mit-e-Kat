@@ -2,56 +2,60 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Mitekat.Discovery.Application.Persistence.Repositories;
 using Mitekat.Discovery.Domain.Aggregates.Meetup;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal record Request : RequestBase<ICollection<MeetupViewModel>>;
-
-internal record MeetupViewModel(
-    Guid Id,
-    string Title,
-    string Description,
-    string Speaker,
-    // TODO: Fix TimeSpan swagger example.
-    TimeSpan Duration,
-    DateTime StartTime,
-    int SignedUp)
+internal class Request : RequestBase<ICollection<MeetupViewModel>>
 {
-    // For AutoMapper
-    private MeetupViewModel()
-        : this(default, default, default, default, default, default, default)
-    {
-    }
+}
+
+internal class MeetupViewModel
+{
+    public Guid Id { get; init; }
+    
+    public string Title { get; init; }
+    
+    public string Description { get; init; }
+
+    public string Speaker { get; init; }
+    
+    // TODO: Fix TimeSpan swagger example.
+    public TimeSpan Duration { get; init; }
+    
+    public DateTime StartTime { get; init; }
+    
+    public int SignedUp { get; init; }
 }
 
 internal class RequestHandler : RequestHandlerBase<Request, ICollection<MeetupViewModel>>
 {
     private readonly IMeetupRepository repository;
-    private readonly IMapper mapper;
 
-    public RequestHandler(IMeetupRepository repository, IMapper mapper)
-    {
+    public RequestHandler(IMeetupRepository repository) =>
         this.repository = repository;
-        this.mapper = mapper;
-    }
 
     public override async Task<Response<ICollection<MeetupViewModel>>> Handle(
         Request _,
         CancellationToken cancellationToken)
     {
         var meetups = await repository.GetAll(cancellationToken);
-        var viewModels = mapper.Map<ICollection<MeetupViewModel>>(meetups);
+        var viewModels = meetups.Select(ToViewModel).ToList();
         return Success(viewModels);
     }
-}
 
-internal class MappingProfile : Profile
-{
-    public MappingProfile() =>
-        CreateMap<Meetup, MeetupViewModel>()
-            .ForMember(model => model.SignedUp, options => options.MapFrom(meetup => meetup.SignedUpUsers.Count));
+    private static MeetupViewModel ToViewModel(Meetup meetup) =>
+        new()
+        {
+            Id = meetup.Id,
+            Title = meetup.Title,
+            Description = meetup.Description,
+            Speaker = meetup.Speaker,
+            Duration = meetup.Duration,
+            StartTime = meetup.StartTime,
+            SignedUp = meetup.SignedUpUsers.Count
+        };
 }

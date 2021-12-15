@@ -3,7 +3,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -16,20 +15,28 @@ public record RequestBody(string Title, string Description, string Speaker, int 
 public class Action : ActionBase
 {
     private readonly IMediator mediator;
-    private readonly IMapper mapper;
 
-    public Action(IMediator mediator, IMapper mapper)
-    {
+    public Action(IMediator mediator) =>
         this.mediator = mediator;
-        this.mapper = mapper;
-    }
 
     [HttpPost("/api/meetups")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public Task<IActionResult> Perform([FromBody] RequestBody requestBody, CancellationToken cancellationToken) =>
         mediator
-            .SendAsync(mapper.Map<Request>(requestBody), cancellationToken)
-            .ToActionResult(Created, InternalServerError);
+            .SendAsync(CreateRequest(requestBody), cancellationToken)
+            .ToActionResult(
+                onSuccess: _ => Created(),
+                onFailure: _ => InternalServerError());
+
+    private static Request CreateRequest(RequestBody requestBody) =>
+        new()
+        {
+            Title = requestBody.Title,
+            Description = requestBody.Description,
+            Speaker = requestBody.Speaker,
+            Duration = requestBody.Duration,
+            StartTime = requestBody.StartTime
+        };
 }
 
 internal class RequestBodyValidator : AbstractValidator<RequestBody>
@@ -57,10 +64,4 @@ internal class RequestBodyValidator : AbstractValidator<RequestBody>
         
         RuleFor(request => request.StartTime).NotEmpty();
     }
-}
-
-internal class MappingProfile : Profile
-{
-    public MappingProfile() =>
-        CreateMap<RequestBody, Request>();
 }

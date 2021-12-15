@@ -3,7 +3,7 @@
 using System;
 using MediatR;
 
-public record RequestBase<TResource> : IRequest<Response<TResource>>
+public class RequestBase<TResource> : IRequest<Response<TResource>>
 {
     public string AccessToken { get; set; }
     

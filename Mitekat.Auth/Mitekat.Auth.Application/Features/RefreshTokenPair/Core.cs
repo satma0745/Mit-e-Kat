@@ -7,7 +7,13 @@ using Mitekat.Auth.Application.Persistence.Repositories;
 using Mitekat.Auth.Domain.Aggregates.User;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal record Request(string RefreshToken) : RequestBase<TokenPair>;
+internal class Request : RequestBase<TokenPair>
+{
+    public string RefreshToken { get; }
+
+    public Request(string refreshToken) =>
+        RefreshToken = refreshToken;
+}
 
 internal class RequestHandler : RequestHandlerBase<Request, TokenPair>
 {

@@ -3,12 +3,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Mitekat.Auth.Application.Persistence.Repositories;
 using Mitekat.Auth.Domain.Aggregates.User;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal record Request : RequestBase<UserInfo>
+internal class Request : RequestBase<UserInfoViewModel>
 {
     public override bool AuthenticationRequired => true;
 
@@ -16,20 +15,23 @@ internal record Request : RequestBase<UserInfo>
         AccessToken = accessToken;
 }
 
-internal record UserInfo(Guid Id, string Username, string DisplayName);
+internal class UserInfoViewModel
+{
+    public Guid Id { get; init; }
+    
+    public string Username { get; init; }
 
-internal class RequestHandler : RequestHandlerBase<Request, UserInfo>
+    public string DisplayName { get; init; }
+}
+
+internal class RequestHandler : RequestHandlerBase<Request, UserInfoViewModel>
 {
     private readonly IUserRepository repository;
-    private readonly IMapper mapper;
 
-    public RequestHandler(IUserRepository repository, IMapper mapper)
-    {
+    public RequestHandler(IUserRepository repository) =>
         this.repository = repository;
-        this.mapper = mapper;
-    }
 
-    public override async Task<Response<UserInfo>> Handle(Request request, CancellationToken cancellationToken)
+    public override async Task<Response<UserInfoViewModel>> Handle(Request request, CancellationToken cancellationToken)
     {
         var user = await repository.GetSingle(request.CurrentUser.Id, cancellationToken);
         if (user is null)
@@ -37,13 +39,15 @@ internal class RequestHandler : RequestHandlerBase<Request, UserInfo>
             return NotFoundFailure();
         }
 
-        var userInfo = mapper.Map<UserInfo>(user);
+        var userInfo = ToViewModel(user);
         return Success(userInfo);
     }
-}
 
-internal class MappingProfile : Profile
-{
-    public MappingProfile() =>
-        CreateMap<User, UserInfo>();
+    private static UserInfoViewModel ToViewModel(User user) =>
+        new()
+        {
+            Id = user.Id,
+            Username = user.Username,
+            DisplayName = user.DisplayName
+        };
 }

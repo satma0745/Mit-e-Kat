@@ -3,7 +3,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,32 +16,34 @@ public record RequestBody(string Title, string Description, string Speaker, int 
 public class Action : ActionBase
 {
     private readonly IMediator mediator;
-    private readonly IMapper mapper;
 
-    public Action(IMediator mediator, IMapper mapper)
-    {
+    public Action(IMediator mediator) =>
         this.mediator = mediator;
-        this.mapper = mapper;
-    }
 
     [HttpPut("/api/meetups/{meetupId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public Task<IActionResult> Perform([FromRoute] Guid meetupId, [FromBody] RequestBody requestBody,
         CancellationToken cancellationToken) =>
         mediator
-            .SendAsync(() =>
-            {
-                var request = new Request(meetupId);
-                mapper.Map(requestBody, request);
-                return request;
-            }, cancellationToken)
+            .SendAsync(CreateRequest(meetupId, requestBody), cancellationToken)
             .ToActionResult(
-                onSuccess: NoContent,
+                onSuccess: _ => NoContent(),
                 error => error switch
                 {
                     Error.NotFoundError => NotFound(),
                     _ => InternalServerError()
                 });
+
+    private static Request CreateRequest(Guid meetupId, RequestBody requestBody) =>
+        new()
+        {
+            MeetupId = meetupId,
+            Title = requestBody.Title,
+            Description = requestBody.Description,
+            Speaker = requestBody.Speaker,
+            Duration = requestBody.Duration,
+            StartTime = requestBody.StartTime
+        };
 }
 
 internal class RequestBodyValidator : AbstractValidator<RequestBody>
@@ -70,10 +71,4 @@ internal class RequestBodyValidator : AbstractValidator<RequestBody>
         
         RuleFor(request => request.StartTime).NotEmpty();
     }
-}
-
-internal class MappingProfile : Profile
-{
-    public MappingProfile() =>
-        CreateMap<RequestBody, Request>();
 }

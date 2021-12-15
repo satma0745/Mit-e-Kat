@@ -8,7 +8,12 @@ using Mitekat.Auth.Application.Persistence.Repositories;
 using Mitekat.Auth.Domain.Aggregates.User;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal record Request(string Username, string Password) : RequestBase<TokenPair>;
+internal class Request : RequestBase<TokenPair>
+{
+    public string Username { get; init; }
+    
+    public string Password { get; init; }
+}
 
 internal class RequestHandler : RequestHandlerBase<Request, TokenPair>
 {
