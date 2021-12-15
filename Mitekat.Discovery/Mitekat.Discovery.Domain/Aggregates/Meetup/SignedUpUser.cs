@@ -2,4 +2,10 @@
 
 using System;
 
-public record SignedUpUser(Guid Id);
+public class SignedUpUser
+{
+    public Guid Id { get; }
+
+    public SignedUpUser(Guid id) =>
+        Id = MeetupValidation.EnsureValidUserId(id);
+}

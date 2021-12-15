@@ -1,4 +1,4 @@
-﻿namespace Mitekat.Discovery.Domain.Exceptions;
+﻿namespace Mitekat.Discovery.Domain.Seedwork;
 
 using System;
 

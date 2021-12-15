@@ -3,11 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mitekat.Discovery.Domain.Assertions;
-using Mitekat.Discovery.Domain.Exceptions;
 using Mitekat.Discovery.Domain.Seedwork;
 
-public class Meetup : IAggregateRoot
+public class Meetup
 {
     public Guid Id { get; }
     
@@ -24,21 +22,21 @@ public class Meetup : IAggregateRoot
     public IReadOnlyCollection<SignedUpUser> SignedUpUsers => signedUpUsers;
     private readonly List<SignedUpUser> signedUpUsers;
 
-    public Meetup(Guid id, string title, string description, string speaker, TimeSpan duration, DateTime startTime)
-    {
-        Id = Assert.NotEmpty(id);
-        Title = Assert.NotNullOrWhiteSpace(title);
-        Description = Assert.NotNull(description);
-        Speaker = Assert.NotNullOrWhiteSpace(speaker);
-        Duration = Assert.InclusiveBetween(duration, TimeSpan.FromMinutes(30), TimeSpan.FromHours(16));
-        StartTime = Assert.NotEmpty(startTime);
-
-        signedUpUsers = new List<SignedUpUser>();
-    }
-
     public Meetup(string title, string description, string speaker, TimeSpan duration, DateTime startTime)
         : this(id: Guid.NewGuid(), title, description, speaker, duration, startTime)
     {
+    }
+    
+    private Meetup(Guid id, string title, string description, string speaker, TimeSpan duration, DateTime startTime)
+    {
+        Id = MeetupValidation.EnsureValidMeetupId(id);
+        Title = MeetupValidation.EnsureValidMeetupTitle(title);
+        Description = MeetupValidation.EnsureValidMeetupDescription(description);
+        Speaker = MeetupValidation.EnsureValidMeetupSpeaker(speaker);
+        Duration = MeetupValidation.EnsureValidMeetupDuration(duration);
+        StartTime = MeetupValidation.EnsureValidMeetupStartTime(startTime);
+
+        signedUpUsers = new List<SignedUpUser>();
     }
 
     public void SignUp(Guid userId)
@@ -54,10 +52,10 @@ public class Meetup : IAggregateRoot
 
     public void Update(string title, string description, string speaker, TimeSpan duration, DateTime startTime)
     {
-        Title = Assert.NotNullOrWhiteSpace(title);
-        Description = Assert.NotNull(description);
-        Speaker = Assert.NotNullOrWhiteSpace(speaker);
-        Duration = Assert.InclusiveBetween(duration, TimeSpan.FromMinutes(30), TimeSpan.FromHours(12));
-        StartTime = Assert.NotEmpty(startTime);
+        Title = MeetupValidation.EnsureValidMeetupTitle(title);
+        Description = MeetupValidation.EnsureValidMeetupDescription(description);
+        Speaker = MeetupValidation.EnsureValidMeetupSpeaker(speaker);
+        Duration = MeetupValidation.EnsureValidMeetupDuration(duration);
+        StartTime = MeetupValidation.EnsureValidMeetupStartTime(startTime);
     }
 }

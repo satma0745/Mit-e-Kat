@@ -3,10 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mitekat.Auth.Domain.Assertions;
-using Mitekat.Auth.Domain.Seedwork;
 
-public class User : IAggregateRoot
+public class User
 {
     public Guid Id { get; }
     
@@ -26,10 +24,10 @@ public class User : IAggregateRoot
 
     private User(Guid id, string username, string displayName, string password)
     {
-        Id = Assert.NotEmpty(id);
-        Username = Assert.NotNullOrWhiteSpace(username);
-        DisplayName = Assert.NotNullOrWhiteSpace(displayName);
-        Password = Assert.NotNullOrWhiteSpace(password);
+        Id = UserValidation.EnsureValidUserId(id);
+        Username = UserValidation.EnsureValidUserUsername(username);
+        DisplayName = UserValidation.EnsureValidUserDisplayName(displayName);
+        Password = UserValidation.EnsureValidUserPassword(password);
         
         refreshTokens = new List<RefreshToken>();
     }
@@ -39,8 +37,8 @@ public class User : IAggregateRoot
 
     public void ReplaceRefreshToken(RefreshToken oldRefreshToken, RefreshToken newRefreshToken)
     {
-        Assert.NotNull(oldRefreshToken);
-        Assert.NotNull(newRefreshToken);
+        _ = oldRefreshToken ?? throw new ArgumentNullException(nameof(oldRefreshToken));
+        _ = newRefreshToken ?? throw new ArgumentNullException(nameof(newRefreshToken));
 
         refreshTokens.Remove(oldRefreshToken);
         refreshTokens.Add(newRefreshToken);
@@ -51,8 +49,8 @@ public class User : IAggregateRoot
 
     public void ChangeCredentials(string username, string password)
     {
-        Username = Assert.NotNullOrWhiteSpace(username);
-        Password = Assert.NotNullOrWhiteSpace(password);
+        Username = UserValidation.EnsureValidUserUsername(username);
+        Password = UserValidation.EnsureValidUserPassword(password);
         
         // Revoke all issued refresh tokens to force the user to re-authenticate
         refreshTokens.Clear();
