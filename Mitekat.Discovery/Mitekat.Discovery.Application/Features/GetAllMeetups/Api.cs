@@ -17,7 +17,7 @@ public class Action : ActionBase
         this.mediator = mediator;
 
     [HttpGet("/api/meetups")]
-    [ProducesResponseType(typeof(ICollection<MeetupViewModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ICollection<ViewModel>), StatusCodes.Status200OK)]
     public Task<IActionResult> Perform(CancellationToken cancellationToken) =>
         mediator
             .SendAsync(new Request(), cancellationToken)

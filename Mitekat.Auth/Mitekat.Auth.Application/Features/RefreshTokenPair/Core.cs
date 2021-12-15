@@ -7,7 +7,7 @@ using Mitekat.Auth.Application.Persistence.Repositories;
 using Mitekat.Auth.Domain.Aggregates.User;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal class Request : RequestBase<TokenPair>
+internal class Request : RequestBase<ViewModel>
 {
     public string RefreshToken { get; }
 
@@ -15,7 +15,14 @@ internal class Request : RequestBase<TokenPair>
         RefreshToken = refreshToken;
 }
 
-internal class RequestHandler : RequestHandlerBase<Request, TokenPair>
+internal class ViewModel
+{
+    public string AccessToken { get; init; }
+    
+    public string RefreshToken { get; init; }
+}
+
+internal class RequestHandler : RequestHandlerBase<Request, ViewModel>
 {
     private readonly ITokenHelper tokenHelper;
     private readonly IUserRepository repository;
@@ -26,7 +33,7 @@ internal class RequestHandler : RequestHandlerBase<Request, TokenPair>
         this.repository = repository;
     }
 
-    public override async Task<Response<TokenPair>> Handle(Request request, CancellationToken cancellationToken)
+    public override async Task<Response<ViewModel>> Handle(Request request, CancellationToken cancellationToken)
     {
         var (userId, oldRefreshTokenId) = tokenHelper.ParseRefreshToken(request.RefreshToken);
         var user = await repository.GetSingle(userId, cancellationToken);
@@ -42,6 +49,14 @@ internal class RequestHandler : RequestHandlerBase<Request, TokenPair>
         await repository.SaveChanges(cancellationToken);
 
         var tokenPair = tokenHelper.IssueTokenPair(newRefreshToken.UserId, newRefreshToken.TokenId);
-        return Success(tokenPair);
+        var viewModel = ToViewModel(tokenPair);
+        return Success(viewModel);
     }
+
+    private static ViewModel ToViewModel(TokenPair tokenPair) =>
+        new()
+        {
+            AccessToken = tokenPair.AccessToken,
+            RefreshToken = tokenPair.RefreshToken
+        };
 }

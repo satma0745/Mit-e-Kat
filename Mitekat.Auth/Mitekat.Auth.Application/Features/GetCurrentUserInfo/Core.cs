@@ -7,7 +7,7 @@ using Mitekat.Auth.Application.Persistence.Repositories;
 using Mitekat.Auth.Domain.Aggregates.User;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal class Request : RequestBase<UserInfoViewModel>
+internal class Request : RequestBase<ViewModel>
 {
     public override bool AuthenticationRequired => true;
 
@@ -15,7 +15,7 @@ internal class Request : RequestBase<UserInfoViewModel>
         AccessToken = accessToken;
 }
 
-internal class UserInfoViewModel
+internal class ViewModel
 {
     public Guid Id { get; init; }
     
@@ -24,14 +24,14 @@ internal class UserInfoViewModel
     public string DisplayName { get; init; }
 }
 
-internal class RequestHandler : RequestHandlerBase<Request, UserInfoViewModel>
+internal class RequestHandler : RequestHandlerBase<Request, ViewModel>
 {
     private readonly IUserRepository repository;
 
     public RequestHandler(IUserRepository repository) =>
         this.repository = repository;
 
-    public override async Task<Response<UserInfoViewModel>> Handle(Request request, CancellationToken cancellationToken)
+    public override async Task<Response<ViewModel>> Handle(Request request, CancellationToken cancellationToken)
     {
         var user = await repository.GetSingle(request.CurrentUser.Id, cancellationToken);
         if (user is null)
@@ -39,11 +39,11 @@ internal class RequestHandler : RequestHandlerBase<Request, UserInfoViewModel>
             return NotFoundFailure();
         }
 
-        var userInfo = ToViewModel(user);
-        return Success(userInfo);
+        var viewModel = ToViewModel(user);
+        return Success(viewModel);
     }
 
-    private static UserInfoViewModel ToViewModel(User user) =>
+    private static ViewModel ToViewModel(User user) =>
         new()
         {
             Id = user.Id,

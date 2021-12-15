@@ -6,7 +6,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Mitekat.Auth.Application.Helpers.Tokens;
 using Mitekat.Seedwork.Features.Actions;
 using Mitekat.Seedwork.Features.Requesting;
 
@@ -21,7 +20,7 @@ public class Action : ActionBase
         this.mediator = mediator;
     
     [HttpPost("/api/auth/authenticate")]
-    [ProducesResponseType(typeof(TokenPair), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ViewModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public Task<IActionResult> Perform([FromBody] RequestBody requestBody, CancellationToken cancellationToken) =>

@@ -9,7 +9,7 @@ using Mitekat.Discovery.Application.Persistence.Repositories;
 using Mitekat.Discovery.Domain.Aggregates.Meetup;
 using Mitekat.Seedwork.Features.Requesting;
 
-internal class Request : RequestBase<MeetupViewModel>
+internal class Request : RequestBase<ViewModel>
 {
     public Guid MeetupId { get; }
 
@@ -17,7 +17,7 @@ internal class Request : RequestBase<MeetupViewModel>
         MeetupId = meetupId;
 }
 
-internal class MeetupViewModel
+internal class ViewModel
 {
     public Guid Id { get; init; }
     
@@ -35,14 +35,14 @@ internal class MeetupViewModel
     public ICollection<Guid> SignedUpUserIds { get; init; }
 }
 
-internal class RequestHandler : RequestHandlerBase<Request, MeetupViewModel>
+internal class RequestHandler : RequestHandlerBase<Request, ViewModel>
 {
     private readonly IMeetupRepository repository;
 
     public RequestHandler(IMeetupRepository repository) =>
         this.repository = repository;
 
-    public override async Task<Response<MeetupViewModel>> Handle(Request request, CancellationToken cancellationToken)
+    public override async Task<Response<ViewModel>> Handle(Request request, CancellationToken cancellationToken)
     {
         var meetup = await repository.GetSingle(request.MeetupId, cancellationToken);
         if (meetup is null)
@@ -54,7 +54,7 @@ internal class RequestHandler : RequestHandlerBase<Request, MeetupViewModel>
         return Success(viewModel);
     }
 
-    private static MeetupViewModel ToViewModel(Meetup meetup) =>
+    private static ViewModel ToViewModel(Meetup meetup) =>
         new()
         {
             Id = meetup.Id,

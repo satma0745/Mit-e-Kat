@@ -18,7 +18,7 @@ public class Action : ActionBase
         this.mediator = mediator;
 
     [HttpPost("/api/meetups/{meetupId:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -26,7 +26,7 @@ public class Action : ActionBase
         mediator
             .SendAsync(CreateRequest(meetupId), cancellationToken)
             .ToActionResult(
-                onSuccess: _ => Ok(),
+                onSuccess: _ => NoContent(),
                 error => error switch
                 {
                     Error.UnauthorizedError => Unauthorized(),

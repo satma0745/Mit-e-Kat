@@ -20,13 +20,13 @@ public class Action : ActionBase
         this.mediator = mediator;
 
     [HttpPut("/api/auth/users/self/credentials")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public Task<IActionResult> Perform([FromBody] RequestBody requestBody, CancellationToken cancellationToken) =>
         mediator
             .SendAsync(CreateRequest(requestBody), cancellationToken)
             .ToActionResult(
-                onSuccess: _ => Ok(),
+                onSuccess: _ => NoContent(),
                 error => error switch
                 {
                     Error.UnauthorizedError => Unauthorized(),

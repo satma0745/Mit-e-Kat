@@ -18,7 +18,7 @@ public class Action : ActionBase
         this.mediator = mediator;
 
     [HttpGet("/api/meetups/{meetupId:guid}")]
-    [ProducesResponseType(typeof(MeetupViewModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ViewModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public Task<IActionResult> Perform([FromRoute] Guid meetupId, CancellationToken cancellationToken) =>
         mediator
