@@ -12,7 +12,7 @@ public class SwaggerFeatureConventionFilter : IOperationFilter
     public virtual void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         var actionClass = context.MethodInfo?.DeclaringType;
-        if (actionClass is null || IsFeatureAction(actionClass))
+        if (actionClass is null || !IsFeatureAction(actionClass))
         {
             return;
         }
