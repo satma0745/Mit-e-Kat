@@ -4,11 +4,8 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Mitekat.Discovery.Core/Mitekat.Discovery.Core.csproj", "./Mitekat.Discovery.Core/"]
+COPY ["Mitekat.Discovery.Application/Mitekat.Discovery.Application.csproj", "./Mitekat.Discovery.Application/"]
 COPY ["Mitekat.Discovery.Domain/Mitekat.Discovery.Domain.csproj", "./Mitekat.Discovery.Domain/"]
-COPY ["Mitekat.Discovery.Helpers/Mitekat.Discovery.Helpers.csproj", "./Mitekat.Discovery.Helpers/"]
-COPY ["Mitekat.Discovery.Persistence/Mitekat.Discovery.Persistence.csproj", "./Mitekat.Discovery.Persistence/"]
-COPY ["Mitekat.Discovery.Web/Mitekat.Discovery.Web.csproj", "./Mitekat.Discovery.Web/"]
 COPY ["Mitekat.Discovery.sln", "./"]
 RUN dotnet restore "Mitekat.Discovery.sln"
 COPY . .
@@ -21,4 +18,4 @@ RUN dotnet publish "Mitekat.Discovery.sln" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Mitekat.Discovery.Web.dll"]
+ENTRYPOINT ["dotnet", "Mitekat.Discovery.Application.dll"]
